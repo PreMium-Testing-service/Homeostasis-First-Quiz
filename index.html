@@ -1,0 +1,1587 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDCAT MOCK QUIZZES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 10px 12px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 16px;
+            text-align: center;
+            flex-grow: 1;
+            padding-right: 25px;
+        }
+
+        .test-number {
+            font-size: 10px;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 12px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #333;
+            font-size: 12px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: border 0.3s;
+            padding-left: 30px;
+        }
+
+        .input-group input:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: #777;
+        }
+
+        .btn {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: block;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 6px;
+            background: #f1f3f5;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .progress-container {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-segment {
+            height: 100%;
+            transition: width 0.3s ease-in-out;
+            background: linear-gradient(to right, #2ed573, #1e90ff);
+        }
+
+        .question-number-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .question-number {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .question-number.current {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: 1px solid #6a11cb;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .question-number.answered {
+            background: linear-gradient(to right, #2ed573, #1e90ff);
+            border: 1px solid #2ed573;
+            color: white;
+        }
+
+        .question-number.visited {
+            background: linear-gradient(to right, #ffa502, #ff4757);
+            border: 1px solid #ffa502;
+            color: white;
+        }
+
+        .question {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #2f3542;
+            line-height: 1.3;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .option:hover {
+            border-color: #6a11cb;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #6a11cb;
+            background: #e6f7ff;
+        }
+
+        .option.correct {
+            border-color: #2ed573;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #ff4757;
+            background: #f8d7da;
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .btn-back {
+            background: linear-gradient(to right, #4c5a70, #2c3e50);
+            color: white;
+        }
+
+        .btn-next {
+            background: linear-gradient(to right, #2ed573, #1e90ff);
+            color: white;
+        }
+
+        .btn-skip {
+            background: linear-gradient(to right, #ffa502, #ff4757);
+            color: white;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-reason {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 10px 0;
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+        }
+
+        .result-header {
+            color: #6a11cb;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .result-header-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .student-info {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            font-size: 11px;
+        }
+
+        .student-info th, .student-info td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .student-info tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .student-info th {
+            background-color: #6a11cb;
+            color: white;
+        }
+        
+        .student-info td:last-child {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        .dmc {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            font-size: 11px;
+        }
+
+        .dmc th {
+            background: #6a11cb;
+            color: white;
+            padding: 6px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .dmc td {
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+            font-size: 10px;
+        }
+
+        .dmc tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .dmc th:nth-child(2), .dmc td:nth-child(2) {
+            width: 25%;
+        }
+
+        .score {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin: 10px 0;
+            text-decoration: none !important;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 12px;
+            color: #777;
+            font-size: 10px;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 800;
+            color: #6a11cb;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .alert {
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: none;
+            font-size: 11px;
+        }
+
+        .alert-error {
+            background: #ffeaea;
+            color: #ff4757;
+            border: 1px solid #ff4757;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+            font-size: 12px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .modal-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .quiz-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .quiz-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6a11cb;
+        }
+        
+        .question-number-display {
+            font-size: 10px;
+            color: #555;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .time-display {
+            display: flex;
+            gap: 6px;
+            background: #f1f3f5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            align-items: center;
+        }
+
+        .timer-box {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .timer-box span {
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        .reasoning-content {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 12px 0;
+            font-size: 11px;
+            display: none;
+            border-left: 2px solid #6a11cb;
+        }
+
+        .reasoning-content h4 {
+            margin-bottom: 5px;
+            color: #6a11cb;
+            font-size: 11px;
+        }
+
+        .service-description {
+            font-size: 11px;
+            text-align: center;
+            margin: 10px 0;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .contact-btn-nav {
+            padding: 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .svg-icon {
+            width: 11px;
+            height: 11px;
+            fill: currentColor;
+        }
+
+        .test-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .login-ui {
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .premium-info {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .login-description {
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .login-card {
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .contact-btn .svg-icon {
+            fill: currentColor;
+            width: 12px;
+            height: 12px;
+        }
+
+        .result-contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .result-contact-buttons .contact-btn-nav {
+            width: 100%;
+        }
+
+        .result-contact-buttons .contact-btn-nav:hover {
+            transform: translateY(-1px);
+        }
+
+        .hamburger-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 12px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 900;
+            padding: 10px;
+        }
+        
+        .menu-content.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #333;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .menu-item:hover {
+            background-color: #f1f3f5;
+        }
+        
+        .quiz-top-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .quiz-top-btn {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+        .quiz-selection-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 600px) {
+            .student-info {
+                grid-template-columns: 1fr;
+            }
+
+            .question-number {
+                width: 20px;
+                height: 20px;
+                font-size: 9px;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+            }
+
+            .time-display {
+                flex-direction: column;
+                gap: 3px;
+                padding: 3px 6px;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" id="main-header">
+            <h1 id="header-title">MDCAT MOCK QUIZZES</h1>
+        </div>
+
+        <div class="content">
+            <div class="section active" id="signin-section">
+                <div class="login-card">
+                    <div class="logo">PreMium Testing Service</div>
+                    <div class="alert alert-error" id="login-error">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg> Invalid password. Please try again.
+                    </div>
+                    <div class="input-group">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="password" placeholder="Enter your password">
+                    </div>
+                    <button class="btn btn-primary" onclick="checkPassword()">
+                        <svg style="width: 12px; height: 12px; margin-left: 8px;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg>
+                        Sign In
+                    </button>
+                    <div class="contact-buttons">
+                        <a href="https://premium-testing-service.blogspot.com/?m=1" class="contact-btn">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26a8 8 0 0 0-14.74 0"></path>
+                                <path d="M21.2 16.51A8 8 0 0 0 18 10h1.26a8 8 0 0 0-14.74 0"></path>
+                            </svg>
+                            Blogger Website
+                        </a>
+                        <a href="mailto:hamadahmadbjr551@gmail.com" class="contact-btn">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            Contact Email
+                        </a>
+                        <a href="tel:03000047325" class="contact-btn">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3.08c0 1.1-.9 2-2 2-1.1 0-2-.9-2-2v-3.08c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2z"></path>
+                                <path d="M20 16.92c0-1.1-.9-2-2-2h-2.08"></path>
+                                <path d="M16 16.92c0-1.1-.9-2-2-2h-2.08"></path>
+                                <path d="M12 16.92c0-1.1-.9-2-2-2H9.92"></path>
+                                <path d="M8 16.92c0-1.1-.9-2-2-2H4"></path>
+                                <path d="M22 16.92L16.92 22"></path>
+                                <path d="M16.92 22L12 16.92"></path>
+                                <path d="M12 16.92L6.92 22"></path>
+                                <path d="M6.92 22L2 16.92"></path>
+                            </svg>
+                            Call Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="registration-section">
+                <div class="login-card">
+                    <div class="logo">Student Registration</div>
+                    <div class="alert alert-error" id="registration-error"></div>
+                    <div class="input-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="Enter your full name">
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email">
+                    </div>
+                    <div class="input-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" placeholder="Enter your mobile number">
+                    </div>
+                    <button class="btn btn-primary" onclick="validateForm()">Proceed to Test</button>
+                </div>
+            </div>
+
+            <div class="section" id="quiz-selection-section">
+                <div class="login-card">
+                    <div class="logo">Select a Quiz</div>
+                    <div class="service-description">
+                        Select a subject to take the quiz.
+                    </div>
+                    <div class="quiz-selection-buttons" id="quiz-buttons"></div>
+                </div>
+            </div>
+
+            <div class="section" id="quiz-password-section">
+                <div class="login-card">
+                    <div class="logo">Enter Quiz Password</div>
+                    <div class="alert alert-error" id="quiz-password-error"></div>
+                    <div class="input-group">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="quiz-password" placeholder="Enter quiz password">
+                    </div>
+                    <button class="btn btn-primary" onclick="checkQuizPassword()">
+                        <svg style="width: 12px; height: 12px; margin-left: 8px;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg>
+                        Start Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="section" id="quiz-section">
+                <div class="quiz-header">
+                    <div class="quiz-details">
+                        <div class="quiz-title" id="quiz-title"></div>
+                        <div class="question-number-display">Question <span id="current-q-num"></span> of <span id="total-questions"></span></div>
+                    </div>
+                    <div class="time-display">
+                        <div class="timer-box">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span id="quiz-timer"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-top-buttons">
+                    <a href="https://premium-testing-service.blogspot.com/?m=1" class="quiz-top-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 10h-1.26a8 8 0 0 0-14.74 0"></path>
+                            <path d="M21.2 16.51A8 8 0 0 0 18 10h1.26a8 8 0 0 0-14.74 0"></path>
+                        </svg>
+                        Blogger Website
+                    </a>
+                    <a href="mailto:hamadahmadbjr551@gmail.com" class="quiz-top-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        Contact Email
+                    </a>
+                    <a href="tel:03000047325" class="quiz-top-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3.08c0 1.1-.9 2-2 2-1.1 0-2-.9-2-2v-3.08c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2z"></path>
+                            <path d="M20 16.92c0-1.1-.9-2-2-2h-2.08"></path>
+                            <path d="M16 16.92c0-1.1-.9-2-2-2h-2.08"></path>
+                            <path d="M12 16.92c0-1.1-.9-2-2-2H9.92"></path>
+                            <path d="M8 16.92c0-1.1-.9-2-2-2H4"></path>
+                            <path d="M22 16.92L16.92 22"></path>
+                            <path d="M16.92 22L12 16.92"></path>
+                            <path d="M12 16.92L6.92 22"></path>
+                            <path d="M6.92 22L2 16.92"></path>
+                        </svg>
+                        Call Us
+                    </a>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-segment" id="progress-bar-segment"></div>
+                    </div>
+                </div>
+                <div class="question-number-icons" id="question-menu"></div>
+                
+                <div class="question-container">
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                    <div class="reasoning-content" id="reasoning">
+                        <h4>Reasoning</h4>
+                        <p id="reasoning-text"></p>
+                    </div>
+                </div>
+                <div class="navigation">
+                    <button id="back-btn" class="nav-btn btn-back" onclick="navigateQuestion(-1)">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5"></path>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back
+                    </button>
+                    <button id="skip-btn" class="nav-btn btn-skip" onclick="skipQuestion()">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg>
+                        Skip
+                    </button>
+                    <button id="next-btn" class="nav-btn btn-next" onclick="navigateQuestion(1)">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                        Next
+                    </button>
+                    <button id="reason-btn" class="nav-btn btn-reason" onclick="toggleReasoning()">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg>
+                        Show Reasoning
+                    </button>
+                    <button id="submit-btn" class="nav-btn btn-submit" onclick="showModal('submit-modal')">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg>
+                        Submit Test
+                    </button>
+                </div>
+            </div>
+
+            <div class="section" id="result-section">
+                <div class="result-card">
+                    <div class="result-header">Test Result</div>
+                    <div class="result-header-buttons">
+                        <a href="https://premium-testing-service.blogspot.com/?m=1" class="contact-btn-nav">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26a8 8 0 0 0-14.74 0"></path>
+                                <path d="M21.2 16.51A8 8 0 0 0 18 10h1.26a8 8 0 0 0-14.74 0"></path>
+                            </svg>
+                            Blogger Website
+                        </a>
+                        <a href="mailto:hamadahmadbjr551@gmail.com" class="contact-btn-nav">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            Contact Email
+                        </a>
+                        <a href="tel:03000047325" class="contact-btn-nav">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3.08c0 1.1-.9 2-2 2-1.1 0-2-.9-2-2v-3.08c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2z"></path>
+                                <path d="M20 16.92c0-1.1-.9-2-2-2h-2.08"></path>
+                            </svg>
+                            Call Us
+                        </a>
+                    </div>
+                    <div class="logo">PreMium Testing Service</div>
+                    <div class="service-description">
+                        PreMium Testing Service helps you prepare for your exams with confidence.
+                    </div>
+                    <table class="student-info">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Student Information</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-info-body">
+                            <tr>
+                                <td>Name</td>
+                                <td id="result-name"></td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td id="result-email"></td>
+                            </tr>
+                            <tr>
+                                <td>Mobile</td>
+                                <td id="result-mobile"></td>
+                            </tr>
+                            <tr>
+                                <td>Time Spent</td>
+                                <td id="result-time-spent"></td>
+                            </tr>
+                            <tr>
+                                <td>Test ID</td>
+                                <td id="result-test-id"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="dmc">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Total MCQs</th>
+                                <th>Attempted</th>
+                                <th>Correct</th>
+                                <th>Incorrect</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dmc-body">
+                            <tr>
+                                <td id="result-subject"></td>
+                                <td id="total-count"></td>
+                                <td id="attempted-count"></td>
+                                <td id="correct-count"></td>
+                                <td id="incorrect-count"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="score" id="score"></div>
+                    <button class="btn btn-primary" onclick="restartTest()">Retake Quiz</button>
+                    <button class="btn btn-primary" onclick="returnToQuizList()">Return to Quiz List</button>
+                    <div class="copyright">
+                        &copy; 2024 PreMium Testing Service. All rights reserved.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="review-section">
+                </div>
+
+            <div class="section" id="quiz-selection-menu-section">
+                </div>
+        </div>
+    </div>
+
+    <div class="modal" id="submit-modal">
+        <div class="modal-content">
+            <p>Are you sure you want to submit the test?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="submitTest()">Yes</button>
+                <button class="btn btn-secondary" onclick="hideModal('submit-modal')">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuizzes = [
+            {
+                title: "Excretion and Excretory Products",
+                password: "1",
+                questions: [
+                    { question: "Why is ammonia considered a highly toxic excretory product?", options: ["It is highly soluble in water", "It diffuses rapidly across cell membranes", "It raises the pH of body fluids", "It requires minimal water for excretion"], answer: "It raises the pH of body fluids", reasoning: "Ammonia is highly toxic because it tends to raise the pH of body fluids and interferes with membrane transport functions." },
+                    { question: "An animal that is ammonotelic most likely inhabits which type of environment?", options: ["Terrestrial with limited water", "Marine with high salt content", "Freshwater aquatic", "Desert with no water access"], answer: "Freshwater aquatic", reasoning: "Animals which excrete ammonia (ammonotelic) require a large amount of water (500 ml per gram of nitrogen) to dissolve it to a nontoxic level, which is only affordable by many aquatic organisms, particularly those in freshwater." },
+                    { question: "What is the primary reason that terrestrial organisms and some marine organisms excrete urea instead of ammonia?", options: ["Urea is 100,000 times less toxic than ammonia", "Urea requires less energy to produce", "Urea is more soluble in water than ammonia", "Urea is more readily available in their diet"], answer: "Urea is 100,000 times less toxic than ammonia", reasoning: "Organisms with less freshwater available invest energy to convert ammonia into urea, which is 100,000 times less toxic than urea, making it safer to excrete with less water." },
+                    { question: "What is the most significant advantage of uric acid as an excretory product for terrestrial invertebrates and egg-laying vertebrates?", options: ["It requires 50 ml of water per gram of nitrogen", "It is produced from the breakdown of nucleic acids", "It is even less toxic than urea and precipitates from solution", "It is a purine that is highly soluble in water"], answer: "It is even less toxic than urea and precipitates from solution", reasoning: "Uric acid is even less toxic than urea and precipitates from solution, allowing the nitrogen atoms per uric acid molecule to be excreted with just 1 ml of water." },
+                    { question: "A scientist observes an animal that excretes its nitrogenous waste in the form of a white paste. Based on the provided text, which of the following is the most likely adaptation of this animal?", options: ["It is an aquatic animal", "It is an ammonotelic organism", "It is a terrestrial invertebrate", "It has a diet rich in proteins"], answer: "It is a terrestrial invertebrate", reasoning: "Uric acid is a purine that precipitates from solution, allowing the nitrogen atoms to be excreted with minimal water (1 ml/g). This has evolved in groups with major water loss problems, such as terrestrial invertebrates and egg-laying vertebrates, which excrete a paste-like substance." },
+                    { question: "Humans excrete small quantities of uric acid. Based on the document, what is the source of this uric acid?", options: ["Breakdown of proteins", "Breakdown of nucleic acids", "Breakdown of urea", "Excess carbon dioxide"], answer: "Breakdown of nucleic acids", reasoning: "Humans excrete small quantities of uric acid, but this is produced from the breakdown of nucleic acid and not from the breakdown of proteins." },
+                    { question: "If a human were to excrete the same amount of nitrogen in the form of ammonia as an ammonotelic organism, how much water would be required per gram of nitrogen?", options: ["1 ml", "50 ml", "500 ml", "100,000 ml"], answer: "500 ml", reasoning: "One gram of nitrogen, in the form of ammonia, requires five hundred ml of water to dissolve it to a nontoxic level." },
+                    { question: "The excretion of nitrogenous waste in the form of urea is characteristic of animals with:", options: ["Plenty of water availability", "Limited freshwater availability", "High salt environments", "No access to water"], answer: "Limited freshwater availability", reasoning: "Organisms with less freshwater available, such as some marine and terrestrial organisms, remove their most of the nitrogenous waste in the form of urea." },
+                    { question: "Which of the following statements about uric acid is most accurate?", options: ["It is a purine that is highly toxic.", "It is a purine that precipitates from solution.", "It is an end-product of protein breakdown.", "It requires a large volume of water for excretion."], answer: "It is a purine that precipitates from solution.", reasoning: "Uric acid is a purine that is less toxic than urea and it precipitates from solution, allowing the nitrogen atoms to be excreted with very little water." },
+                    { question: "The process of excretion primarily involves the removal of which type of waste product?", options: ["Carbon dioxide", "Nitrogen containing compounds", "Excess water", "Unused food particles"], answer: "Nitrogen containing compounds", reasoning: "Metabolism produces a number of toxic by-products, particularly the nitrogen containing compounds. Excretion is the removal of chemical waste from the body which are produced by the metabolic processes within cells." },
+                    { question: "What is the primary reason why marine fishes are typically ammonotelic?", options: ["They have an abundance of freshwater to excrete ammonia.", "Their bodies can tolerate high levels of toxic ammonia.", "They have evolved a highly efficient system for ammonia storage.", "They have no other way to excrete nitrogenous waste."], answer: "They have an abundance of freshwater to excrete ammonia.", reasoning: "One gram of nitrogen, in the form of ammonia, requires five hundred ml of water to dissolve it to a nontoxic level. Such plenty of water can only be afforded by many aquatic organisms, particularly those in freshwater, such as most fishes." },
+                    { question: "Why is converting ammonia to urea an energy-intensive process for some organisms?", options: ["To make the waste product more toxic.", "To store the waste product indefinitely.", "To allow for excretion with less water.", "To convert it into a soluble form."], answer: "To allow for excretion with less water.", reasoning: "Organisms with less freshwater available invest some energy to convert the ammonia into urea, which is 100,000 times less toxic than urea, enabling its excretion with less water." },
+                    { question: "Which of the following is an example of an ammonotelic animal, according to the text?", options: ["Human", "Bird", "Marine fish", "Terrestrial invertebrate"], answer: "Marine fish", reasoning: "The text states that many aquatic organisms, particularly those in freshwater, e.g., most fishes, protozoans, sponges, coelenterates, are ammonotelic." },
+                    { question: "A terrestrial animal that is well-adapted to arid conditions would most likely excrete its nitrogenous waste as:", options: ["Ammonia", "Urea", "Uric acid", "Nitrates"], answer: "Uric acid", reasoning: "Uric acid has evolved in two groups with major water loss problems, terrestrial invertebrates and egg-laying vertebrates, as it requires only 1 ml of water per gram of nitrogen for excretion." },
+                    { question: "What is the primary function of the body's excretory system?", options: ["Digestion of food", "Regulation of body temperature", "Removal of metabolic waste", "Oxygen transport"], answer: "Removal of metabolic waste", reasoning: "The excretion is the removal of chemical waste from the body which are produced by the metabolic processes within cells." },
+                    { question: "What is the main difference in excretion between a freshwater fish and a human?", options: ["The fish excretes uric acid, while the human excretes urea.", "The fish excretes ammonia, while the human excretes urea.", "The fish excretes urea, while the human excretes uric acid.", "Both excrete ammonia, but the fish's is more concentrated."], answer: "The fish excretes ammonia, while the human excretes urea.", reasoning: "The text states that most freshwater fishes excrete ammonia (ammonotelic), while humans excrete urea as their main nitrogenous waste product." },
+                    { question: "The solubility of nitrogenous excretory products from most soluble to least soluble is:", options: ["Ammonia > Urea > Uric acid", "Uric acid > Urea > Ammonia", "Urea > Ammonia > Uric acid", "Ammonia = Urea = Uric acid"], answer: "Ammonia > Urea > Uric acid", reasoning: "The text states that ammonia is highly soluble, urea requires 50 ml of water/g, and uric acid requires only 1 ml of water/g, indicating its low solubility and ability to precipitate." },
+                    { question: "Why is the excretion of ammonia a disadvantage for terrestrial organisms?", options: ["It is not produced by terrestrial organisms.", "It requires a large volume of water for excretion.", "It is difficult to transport in the blood.", "It is easily converted to uric acid."], answer: "It requires a large volume of water for excretion.", reasoning: "One gram of nitrogen, in the form of ammonia, requires five hundred ml of water to dissolve it to a nontoxic level, which is a volume of water that cannot be afforded by terrestrial organisms." },
+                    { question: "An animal that excrete a nitrogenous waste product that is 100,000 times less toxic than ammonia is most likely a:", options: ["Ammonotelic", "Ureotelic", "Uricotelic", "All of the above"], answer: "Ureotelic", reasoning: "The text states that organisms with less freshwater available convert ammonia into urea, which is 100,000 times less toxic. These animals are called ureotelic." },
+                    { question: "Based on the text, which of the following is a key characteristic of organisms that excrete uric acid?", options: ["They live in an aquatic environment.", "They have evolved to deal with water loss problems.", "They produce a highly toxic waste product.", "They require a large volume of water for excretion."], answer: "They have evolved to deal with water loss problems.", reasoning: "The text states that uric acid has evolved in two groups with major water loss problems, terrestrial invertebrates and egg-laying vertebrates, because it requires just 1 ml of water for excretion." }
+                ]
+            },
+            {
+                title: "The Human Excretory System",
+                password: "2",
+                questions: [
+                    { question: "Which of the following statements about the human excretory system is INCORRECT?", options: ["The kidneys lie on either side of the vertebral column.", "The ureter transports urine from the kidney to the urinary bladder.", "The urethra is the tube that carries urine from the bladder to the outside.", "The urinary bladder is located within the abdominal cavity."], answer: "The urinary bladder is located within the abdominal cavity.", reasoning: "The urinary bladder is located within the pelvic cavity, not the abdominal cavity." },
+                    { question: "What is the correct pathway for urine from its formation to its exit from the body?", options: ["Renal pelvis → Ureter → Urinary bladder → Urethra", "Ureter → Renal pelvis → Urinary bladder → Urethra", "Renal pelvis → Urinary bladder → Ureter → Urethra", "Kidney → Urethra → Urinary bladder → Ureter"], answer: "Renal pelvis → Ureter → Urinary bladder → Urethra", reasoning: "Urine is collected in the renal pelvis and exits the kidney through the ureter, which extends downward to join the urinary bladder. The urethra carries urine from the bladder to the outside of the body." },
+                    { question: "Which structure is responsible for the final collection of urine from multiple nephrons before it enters the renal pelvis?", options: ["Loop of Henle", "Distal convoluted tubule", "Collecting duct", "Renal corpuscle"], answer: "Collecting duct", reasoning: "The collecting duct receives many nephrons. Many collecting ducts combine together to form larger collecting ducts which empty into minor calyces through an opening in a renal papilla, leading to the renal pelvis." },
+                    { question: "The science concerned with the structure, functions, and diseases of the kidneys is called:", options: ["Urology", "Nephrology", "Cardiology", "Pathology"], answer: "Nephrology", reasoning: "The science concerned with the structure, functions and diseases of the kidneys is called nephrology." },
+                    { question: "The renal artery and nerves enter and the renal vein and ureter exit the kidney through which specific structure?", options: ["Renal cortex", "Renal medulla", "Renal sinus", "Hilum"], answer: "Hilum", reasoning: "The entrance to the renal sinus is termed hilum, where the renal artery and nerves enter and the renal vein and the ureter exit." },
+                    { question: "What is the primary functional unit of the kidney?", options: ["Renal artery", "Glomerulus", "Nephron", "Bowman's capsule"], answer: "Nephron", reasoning: "The nephron is the functional unit of the kidney." },
+                    { question: "The renal corpuscle is composed of which two structures?", options: ["Glomerulus and collecting duct", "Bowman's capsule and loop of Henle", "Glomerulus and Bowman's capsule", "Proximal convoluted tubule and distal convoluted tubule"], answer: "Glomerulus and Bowman's capsule", reasoning: "A renal corpuscle is composed of a network of capillaries called glomerulus which is surrounded by a thin double-walled structure called Bowman's capsule." },
+                    { question: "How does blood travel from the interlobular arteries to the peritubular capillaries?", options: ["Interlobular artery → venule → peritubular capillaries", "Interlobular artery → efferent arteriole → peritubular capillaries", "Interlobular artery → afferent arteriole → glomerulus → efferent arteriole → peritubular capillaries", "Interlobular artery → glomerulus → afferent arteriole → peritubular capillaries"], answer: "Interlobular artery → afferent arteriole → glomerulus → efferent arteriole → peritubular capillaries", reasoning: "The renal artery gives rise to interlobular arteries, which give rise to afferent arterioles that supply blood to the glomerular capillaries. Efferent arterioles arising from the glomeruli give rise to the peritubular capillaries." },
+                    { question: "What is the main function of the kidneys as an osmoregulatory organ?", options: ["Filtration of nitrogenous wastes", "Formation of dilute or concentrated urine", "Secretion of hormones like renin", "Regulation of blood pressure"], answer: "Formation of dilute or concentrated urine", reasoning: "Being an osmoregulatory organ, these are concerned with the formation of dilute urine during the state of flooding and form concentrated urine during the state of dehydration." },
+                    { question: "What is the key difference between cortical nephrons and juxtamedullary nephrons?", options: ["Cortical nephrons have a longer loop of Henle.", "Juxtamedullary nephrons are more common in humans.", "Juxtamedullary nephrons have their renal corpuscle close to the cortex-medulla junction.", "Cortical nephrons are responsible for water retention in short supply."], answer: "Juxtamedullary nephrons have their renal corpuscle close to the cortex-medulla junction.", reasoning: "Cortical nephrons are found in the cortex and have relatively short loops of Henle. Juxtamedullary nephrons have their renal corpuscle close to the junction of the cortex and medulla and have long loops of Henle that extend deep into the medulla." },
+                    { question: "Which part of the renal tubule is found at the closed end of a renal tubule?", options: ["Glomerulus", "Loop of Henle", "Bowman's capsule", "Proximal convoluted tubule"], answer: "Bowman's capsule", reasoning: "The Bowman's capsule is an expansion at the closed end of a renal tubule." },
+                    { question: "Where is the loop of Henle located within the kidney structure?", options: ["Renal cortex", "Renal pelvis", "Renal medulla", "Renal sinus"], answer: "Renal medulla", reasoning: "The proximal convoluted tubule dips toward the renal pelvis into the medulla forming a sharp loop called the loop of Henle." },
+                    { question: "What is the primary role of the vasa recta?", options: ["To drain blood from the glomerulus.", "To supply blood to the renal pelvis.", "To course into the medulla along with the loops of Henle.", "To collect urine from the collecting ducts."], answer: "To course into the medulla along with the loops of Henle.", reasoning: "Specialized part of the peritubular capillaries called vasa recta course into the medulla along with the loops of Henle and then back toward the cortex." },
+                    { question: "Why is there a considerable blood pressure developed in the glomerulus?", options: ["The afferent arteriole has a smaller diameter than the efferent arteriole.", "The efferent arteriole has a smaller diameter than the afferent arteriole.", "The venule has a larger diameter than the efferent arteriole.", "The afferent arteriole has the same diameter as the efferent arteriole."], answer: "The efferent arteriole has a smaller diameter than the afferent arteriole.", reasoning: "Efferent arterioles have a somewhat less diameter than that of the afferent vessel. Therefore, a considerable blood pressure is developed in the glomerulus." },
+                    { question: "A hollow, distensible muscular organ that serves as a urine reservoir is called the:", options: ["Ureter", "Kidney", "Urinary bladder", "Urethra"], answer: "Urinary bladder", reasoning: "The urinary bladder is a hollow and distensible muscular organ. It is located within the pelvic cavity. It serves as a urine reservoir." },
+                    { question: "What is the main difference between the renal cortex and the renal medulla?", options: ["The medulla is the outer layer, and the cortex is the inner layer.", "The cortex is the outer layer, and the medulla is the inner layer.", "The cortex contains the renal pyramids, while the medulla contains the renal sinus.", "The medulla contains the glomeruli, while the cortex contains the collecting ducts."], answer: "The cortex is the outer layer, and the medulla is the inner layer.", reasoning: "The kidney is divided into an outer renal cortex and an inner renal medulla that surrounds the renal sinus." },
+                    { question: "Which of the following is NOT a part of the human excretory system (urinary system)?", options: ["Kidneys", "Liver", "Urinary bladder", "Ureter"], answer: "Liver", reasoning: "The excretory system (urinary system) consists of kidneys, ureter, urinary bladder and a tubular urethra." },
+                    { question: "The medial depression of the kidney where vessels and the ureter enter and exit is known as the:", options: ["Renal pelvis", "Renal cortex", "Renal pyramid", "Hilum"], answer: "Hilum", reasoning: "The medial side is deeply concave. The resulting medial depression leads into a hollow chamber called the renal sinus. The entrance to this sinus is termed hilum." },
+                    { question: "The renal pelvis is responsible for:", options: ["Filtering blood", "Collecting urine", "Producing hormones", "Reabsorbing water"], answer: "Collecting urine", reasoning: "Urine is collected in the renal pelvis and exits the kidney through the ureter." },
+                    { question: "Where are the renal pyramids located?", options: ["Renal cortex", "Renal medulla", "Renal sinus", "Renal pelvis"], answer: "Renal medulla", reasoning: "The renal medulla consists of a number of cone-shaped renal pyramids." }
+                ]
+            },
+            {
+                title: "Urine Formation",
+                password: "3",
+                questions: [
+                    { question: "Glomerular filtration is also known as 'ultrafiltration' because:", options: ["It filters out all molecules from the blood.", "It occurs at exceptionally high pressure.", "It selectively reabsorbs organic nutrients.", "It only occurs in cortical nephrons."], answer: "It occurs at exceptionally high pressure.", reasoning: "Glomerular filtration (pressure filtration or ultrafiltration) takes place in the renal capsule under pressure. The glomerular capillaries have exceptionally high blood pressure than any other part of the capillary bed in the body." },
+                    { question: "During glomerular filtration, what is left behind in the blood due to their size?", options: ["Water and small solute molecules", "Glucose and amino acids", "Larger molecules like proteins and red blood cells", "Urea and uric acid"], answer: "Larger molecules like proteins and red blood cells", reasoning: "Larger molecules like proteins, as well as red blood cells and platelets are left behind in the blood." },
+                    { question: "What is the primary function of selective reabsorption (tubular reabsorption)?", options: ["To excrete toxic substances from the blood into the tubules.", "To filter blood plasma to form glomerular filtrate.", "To reabsorb certain filtered substances back into the blood.", "To concentrate urine by removing excess water."], answer: "To reabsorb certain filtered substances back into the blood.", reasoning: "Selective reabsorption (tubular reabsorption) is the process by which certain substances that have been filtered out of the blood during ultrafiltration are reabsorbed. These substances include glucose, amino acids, vitamins, inorganic salts and some water." },
+                    { question: "Which part of the nephron is responsible for the reabsorption of all glucose, amino acids, and vitamins?", options: ["Loop of Henle", "Distal convoluted tubule", "Collecting duct", "Proximal convoluted tubule"], answer: "Proximal convoluted tubule", reasoning: "Over 80% of the glomerular filtrate is reabsorbed in proximal convoluted tubules. Here all of the glucose, amino acids, vitamins, hormones and about 80% of the sodium chloride and water are reabsorbed." },
+                    { question: "What is the main purpose of tubular secretion?", options: ["To maintain the pH of the urine.", "To reabsorb water back into the blood.", "To filter blood at high pressure.", "To form concentrated urine."], answer: "To maintain the pH of the urine.", reasoning: "The main purpose of this secretion is to maintain the pH of the urine." },
+                    { question: "The formation of hypertonic (more concentrated) urine is dependent on the reabsorption of water from which two structures?", options: ["Glomerulus and Bowman's capsule", "Proximal convoluted tubule and distal convoluted tubule", "Loop of Henle and collecting duct", "Renal artery and renal vein"], answer: "Loop of Henle and collecting duct", reasoning: "The formation of hypertonic (more concentrated) urine is dependent on the reabsorption of water from the loop of Henle and collecting duct." },
+                    { question: "What hormone is responsible for promoting the movement of water out of the descending limb of the loop of Henle?", options: ["Aldosterone", "Erythropoietin", "Renin", "Anti-diuretic hormone (ADH)"], answer: "Anti-diuretic hormone (ADH)", reasoning: "This movement of water is also promoted by anti-diuretic hormone which is secreted from the posterior lobe of the pituitary." },
+                    { question: "In the countercurrent multiplier mechanism, what causes water to pass out of the descending limb by osmosis?", options: ["Increased sodium chloride concentration in the filtrate.", "Active transport of sodium chloride out of the descending limb.", "Increased concentration of water in the kidney interstitium.", "Aldosterone controlling water movement."], answer: "Increased concentration of water in the kidney interstitium.", reasoning: "As a result (of sodium chloride actively being transported out of the ascending limb), water passes out of the descending limb by osmosis." },
+                    { question: "Which of the following processes is NOT directly involved in urine formation?", options: ["Glomerular filtration", "Tubular reabsorption", "Tubular secretion", "Digestive absorption"], answer: "Digestive absorption", reasoning: "The formation of urine involves glomerular filtration, tubular reabsorption and tubular secretion." },
+                    { question: "The glomerular filtrate has a chemical composition similar to that of:", options: ["Urine", "Blood plasma", "Red blood cells", "Saliva"], answer: "Blood plasma", reasoning: "The filtered fluid in the capsule is called glomerular filtrate. It has a chemical composition similar to that of blood plasma." },
+                    { question: "Which part of the nephron is impermeable to water, but actively absorbs sodium and chloride ions?", options: ["Descending limb of the loop of Henle", "Proximal convoluted tubule", "Ascending limb of the loop of Henle", "Collecting duct"], answer: "Ascending limb of the loop of Henle", reasoning: "The wall of the ascending limb is impermeable to water, however, sodium, chloride, potassium and other ions are absorbed actively here." },
+                    { question: "Which of the following is an osmoregulatory function of the kidney?", options: ["Filtration of nitrogenous wastes.", "Secretion of the hormone erythropoietin.", "Formation of concentrated urine during dehydration.", "Regulation of blood pressure by secreting renin."], answer: "Formation of concentrated urine during dehydration.", reasoning: "Being osmoregulatory organs, these are concerned with the formation of dilute urine during the state of flooding and form concentrated urine during the state of dehydration." },
+                    { question: "What is the primary substance actively transported out of the ascending limb of the loop of Henle?", options: ["Water", "Urea", "Sodium chloride", "Amino acids"], answer: "Sodium chloride", reasoning: "As fluid travels up the ascending limb, sodium chloride is transported actively out of the limb into the surrounding area." },
+                    { question: "The hormone aldosterone is responsible for controlling the movement of what substance in the countercurrent multiplier mechanism?", options: ["Water", "Potassium", "Sodium chloride", "Hydrogen ions"], answer: "Sodium chloride", reasoning: "This movement (of sodium chloride) is controlled by aldosterone (adrenal cortical hormone)." },
+                    { question: "Approximately what percentage of the glomerular filtrate is reabsorbed in the proximal convoluted tubules?", options: ["20%", "50%", "80%", "99.5%"], answer: "80%", reasoning: "Over 80% of the glomerular filtrate is reabsorbed in proximal convoluted tubules." },
+                    { question: "Which of the following is NOT reabsorbed during selective reabsorption?", options: ["Glucose", "Vitamins", "Proteins", "Inorganic salts"], answer: "Proteins", reasoning: "Larger molecules like proteins, as well as red blood cells and platelets are left behind in the blood, while smaller substances like glucose, amino acids, vitamins, and inorganic salts are reabsorbed." },
+                    { question: "What is the role of the distal convoluted tubules in maintaining blood pH?", options: ["Reabsorption of bicarbonate ions", "Secretion of hydrogen ions", "Active transport of sodium chloride", "Reabsorption of water"], answer: "Secretion of hydrogen ions", reasoning: "The distal convoluted tubules have an osmoregulatory role and also control blood pH by secreting hydrogen ions." },
+                    { question: "The passage of water and small solute molecules from the glomerular capillaries into the Bowman's capsule is due to:", options: ["Osmotic pressure", "Active transport", "Hydrostatic pressure", "Countercurrent multiplication"], answer: "Hydrostatic pressure", reasoning: "Glomerular filtration takes place in the renal capsule under pressure. The pressure comes from the blood pressure and is known as hydrostatic pressure." },
+                    { question: "ADH opens water channels in which part of the nephron to allow water to move out of the filtrate?", options: ["Glomerulus", "Proximal convoluted tubule", "Loop of Henle", "Collecting ducts"], answer: "Collecting ducts", reasoning: "ADH opens water channels in collecting ducts to allow water to move out of the filtrate. It reduces the volume of urine making it more concentrated." },
+                    { question: "The process of urine formation is a combination of which three main mechanisms?", options: ["Absorption, Secretion, Elimination", "Filtration, Reabsorption, Secretion", "Reabsorption, Concentration, Excretion", "Filtration, Digestion, Elimination"], answer: "Filtration, Reabsorption, Secretion", reasoning: "The formation of urine involves glomerular filtration, tubular reabsorption and tubular secretion." }
+                ]
+            },
+            {
+                title: "Urinary Tract Disorders",
+                password: "4",
+                questions: [
+                    { question: "Which of the following is the most common cause of Urinary Tract Infections (UTIs) in women?", options: ["A diet high in sugar", "Continuous state of dehydration", "Shortness of the female urethra", "Genetic predisposition"], answer: "Shortness of the female urethra", reasoning: "In general, the higher risk in women is mostly due to the shortness of the female urethra, which is 1.5 inches compared to 8 inches in men. Bacteria can be easily transferred from the anal opening to the urethra." },
+                    { question: "An infection of the kidneys is specifically known as:", options: ["Urethritis", "Cystitis", "Pyelonephritis", "Nephrolithiasis"], answer: "Pyelonephritis", reasoning: "The types of UTIs depending upon the site are: urethritis is an infection of the urethra, cystitis involves the bladder and if the kidneys are infected the infection is called pyelonephritis." },
+                    { question: "According to the text, which part of the urinary tract is rarely the site of a bacterial infection?", options: ["Urethra", "Bladder", "Kidneys", "Ureters"], answer: "Ureters", reasoning: "Almost all parts of the urinary tract are affected by the infection except ureters which are rarely the site of infection." },
+                    { question: "A patient's urine test shows a persistently acidic pH. Based on the document, what type of kidney stone would a physician hypothesize?", options: ["Calcium oxalate", "Calcium phosphate", "Uric acid", "Magnesium ammonium phosphate"], answer: "Uric acid", reasoning: "When urine is persistently acidic the stone is of uric acid type." },
+                    { question: "What is the primary cause of calcium oxalate type kidney stones?", options: ["Hyperuricemia", "High concentration of cystine", "Increased calcium and oxalate levels in urine", "Increased intake of acidic foods"], answer: "Increased calcium and oxalate levels in urine", reasoning: "Hypercalciuria and hyperoxaluria cause calcium oxalate type of kidney stones which are present in 70% of kidney stone patients." },
+                    { question: "What is the primary principle behind Extracorporeal Shock Wave Lithotripsy (ESWL)?", options: ["Inserting a scope to break up the stone.", "Generating shock waves to break the stone into small pieces.", "Using open surgery to remove the stone.", "Inserting a tube into the kidney to remove the stone."], answer: "Generating shock waves to break the stone into small pieces.", reasoning: "In ESWL, an instrument called a lithotripter is used to generate shock waves from outside the patient's body focused on the stone, breaking it into small pieces." },
+                    { question: "Which of the following is a potential cause of chronic renal failure?", options: ["Haemorrhage due to trauma", "Vomiting and diarrhoea", "Bacterial infection of the pelvis", "Kidney stone obstruction"], answer: "Bacterial infection of the pelvis", reasoning: "Chronic renal failure may be caused by: (a) Bacterial infection of the pelvis and surrounding tissue." },
+                    { question: "The general term for a decline in kidney function is:", options: ["Nephrolithiasis", "Pyelonephritis", "Renal failure", "Cystitis"], answer: "Renal failure", reasoning: "A general term for a decline in kidney function particularly the efficiency of the filtering process is called kidney failure or renal failure." },
+                    { question: "A kidney graft for a transplant is most likely taken from:", options: ["A cadaver donor or a related person.", "Only a cadaver donor.", "Only an unrelated person.", "Only a related person."], answer: "A cadaver donor or a related person.", reasoning: "The kidney graft is taken from a deceased (cadaver) donor or from a related or unrelated person." },
+                    { question: "What is the main reason why the old kidneys are usually left in place after a kidney transplant?", options: ["They do not cause harm.", "They still contribute to filtration.", "It is a simpler surgical procedure.", "They produce necessary hormones."], answer: "They do not cause harm.", reasoning: "The old kidneys are left in place and they do not harm. The existing kidneys are removed only if they cause persistent infection or high blood pressure." },
+                    { question: "What is the primary problem associated with a kidney transplant that requires patients to take medications like cyclosporine?", options: ["Anemia", "High blood pressure", "Rejection of the transplanted kidney", "Formation of kidney stones"], answer: "Rejection of the transplanted kidney", reasoning: "The two problems are rejection and toxic effects of cyclosporine. Patients are required to take medications such as cyclosporine etc., to suppress their immune system in order to prevent rejection of the transplanted kidney." },
+                    { question: "According to the provided text, what is the safest and most effective way to prevent a urinary tract infection?", options: ["Antibiotic therapy", "Personal hygiene and drinking lots of water", "Avoiding acidic foods", "Reducing blood pressure"], answer: "Personal hygiene and drinking lots of water", reasoning: "For prevention, one should drink a lot of water to flush out bacteria. Personal hygiene is especially important too." },
+                    { question: "In Percutaneous Nephro Lithotripsy (PCNL), a tube is inserted into the kidney to create a tract. This procedure is preferred for:", options: ["Small kidney stones.", "Urinary tract infections.", "Larger kidney stones.", "Chronic renal failure."], answer: "Larger kidney stones.", reasoning: "In case of larger stones PCNL is preferred in which a tube is inserted from the patient's back into the kidney to create a tract." },
+                    { question: "A patient suffering from 'uremia' due to chronic kidney failure would likely require:", options: ["Antibiotic therapy", "Open surgery", "Dialysis or a kidney transplant", "Increased water intake"], answer: "Dialysis or a kidney transplant", reasoning: "Chronic kidney failure can progress to end-stage renal disease (ESRD) and uremia, which is fatal unless artificial filtering (dialysis) or a kidney transplant is performed." },
+                    { question: "The medical branch that deals with diseases and abnormalities of the urinary tract is known as:", options: ["Nephrology", "Urology", "Oncology", "Pathology"], answer: "Urology", reasoning: "Urology is the branch of medicine which deals with diseases and abnormalities of the urinary tract and their treatment." },
+                    { question: "High calcium levels in the blood, known as hypercalcemia, can lead to what condition in the urine?", options: ["Hyperoxaluria", "Hypercalciuria", "Hyperuricemia", "Urethritis"], answer: "Hypercalciuria", reasoning: "Kidney stones may be caused by increased calcium level in the blood which is termed as hypercalcemia. It, in turn, causes high calcium in the urine, the hypercalciuria." },
+                    { question: "According to the text, a staghorn stone is a type of:", options: ["Uric acid stone", "Kidney stone", "Calcium phosphate stone", "Cystine stone"], answer: "Kidney stone", reasoning: "The text mentions a branching stone is called a staghorn stone, and it is listed under the section for kidney stones." },
+                    { question: "Which of the following is an acute cause of renal failure?", options: ["Diabetes mellitus", "High blood pressure", "Haemorrhage due to trauma", "Nephritis"], answer: "Haemorrhage due to trauma", reasoning: "Acute renal failure may be caused by: (a) Haemorrhage due to trauma, (b) Vomiting, diarrhoea. (c) Diuresis (excess excretion of urine), sweating. (d) Obstruction of the ureters, bladder or urethra e.g., kidney stone. (e) Severe nephritis." },
+                    { question: "What is the primary reason for HLA matching in a kidney transplant?", options: ["To ensure the blood groups are compatible.", "To prevent a bacterial infection.", "To improve the survival of the graft.", "To reduce the need for medication."], answer: "To improve the survival of the graft.", reasoning: "It is usual to select donor kidneys on the basis of human leucocytes antigen (HLA) matching as this improves graft survival." },
+                    { question: "According to the document, kidney donors generally live longer than the general population because:", options: ["The loss of a kidney improves their metabolism.", "They receive medical benefits after the donation.", "They come from a pool of healthy people.", "They are required to eat a special diet."], answer: "They come from a pool of healthy people.", reasoning: "Studies have shown that kidney donors actually live longer than the general population, because donors come from a pool of people in good health." }
+                ]
+            }
+        ];
+        
+        const developerPassword = "Dev-PreMium-736";
+        let currentQuizData = null;
+        let userAnswers = [];
+        let visitedQuestions = [];
+        let currentQuestion = 0;
+        let totalTimeLeft = 0;
+        let timerInterval;
+        let studentInfo = {
+            name: '',
+            email: '',
+            mobile: ''
+        };
+        let currentTestID = '';
+
+        document.getElementById('password').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkPassword();
+            }
+        });
+
+        document.getElementById('quiz-password').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkQuizPassword();
+            }
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            hideModal('submit-modal');
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('login-error');
+
+            if (password === 'PreMium-001') {
+                showSection('registration-section');
+            } else if (password === developerPassword) {
+                studentInfo.name = 'Developer User';
+                studentInfo.email = 'developer@gmail.com';
+                studentInfo.mobile = '+923000047325';
+                document.getElementById('header-title').textContent = 'Developer Mode';
+                showSection('quiz-selection-section'); // Show the selection page
+                generateQuizButtons(); // Populate the selection page with buttons
+            } else {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Invalid password. Please try again.';
+            }
+        }
+
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const errorElement = document.getElementById('registration-error');
+
+            if (!name || !email || !mobile) {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Please fill out all fields.';
+                return;
+            }
+
+            if (!email.endsWith('@gmail.com')) {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Email must be a @gmail.com address.';
+                return;
+            }
+
+            if (!mobile.startsWith('+92') || mobile.length < 13) {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Mobile number must start with +92 and be at least 13 digits long.';
+                return;
+            }
+
+            studentInfo.name = name;
+            studentInfo.email = email;
+            studentInfo.mobile = mobile;
+            errorElement.style.display = 'none';
+            document.getElementById('header-title').textContent = 'MDCAT MOCK QUIZZES';
+            showSection('quiz-selection-section'); // Show the selection page
+            generateQuizButtons(); // Populate the selection page with buttons
+        }
+
+        function generateQuizButtons() {
+            const buttonsContainer = document.getElementById('quiz-buttons');
+            buttonsContainer.innerHTML = '';
+            allQuizzes.forEach((quiz, index) => {
+                const button = document.createElement('button');
+                button.classList.add('btn', 'btn-primary');
+                button.textContent = quiz.title;
+                button.onclick = () => showQuizPassword(index);
+                buttonsContainer.appendChild(button);
+            });
+        }
+
+        function showQuizSelection() {
+            showSection('quiz-selection-section');
+        }
+
+        function showQuizPassword(quizIndex) {
+            showSection('quiz-password-section');
+            document.getElementById('quiz-password').value = '';
+            document.getElementById('quiz-password-error').style.display = 'none';
+            document.getElementById('quiz-password').dataset.quizIndex = quizIndex;
+        }
+
+        function checkQuizPassword() {
+            const passwordInput = document.getElementById('quiz-password');
+            const quizIndex = parseInt(passwordInput.dataset.quizIndex);
+            const password = passwordInput.value.trim();
+            const errorElement = document.getElementById('quiz-password-error');
+            const quizData = allQuizzes[quizIndex];
+        
+            if (password === quizData.password || password === developerPassword) {
+                startQuiz(quizData.questions, quizData.title, quizData.title.replace(' ', '-'));
+            } else {
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Invalid quiz password. Please try again.';
+            }
+        }
+
+        function startQuiz(questionsData, subject, testId) {
+            currentQuizData = questionsData;
+            currentTestID = testId;
+            userAnswers = Array(currentQuizData.length).fill(null);
+            visitedQuestions = Array(currentQuizData.length).fill(false);
+            currentQuestion = 0;
+            totalTimeLeft = currentQuizData.length * 60;
+            
+            document.getElementById('quiz-title').textContent = `Subject: ${subject}`;
+            document.getElementById('total-questions').textContent = currentQuizData.length;
+            document.getElementById('current-q-num').textContent = currentQuestion + 1;
+
+            showSection('quiz-section');
+            loadQuestion(currentQuestion);
+            updateQuestionMenu();
+            updateProgressBar();
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                totalTimeLeft--;
+                updateTimerDisplay();
+                if (totalTimeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! The test will be submitted automatically.");
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(totalTimeLeft / 60);
+            const seconds = totalTimeLeft % 60;
+            document.getElementById('quiz-timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function loadQuestion(index, fromMenu = false) {
+            if (index >= 0 && index < currentQuizData.length) {
+                currentQuestion = index;
+                visitedQuestions[index] = true;
+                const q = currentQuizData[index];
+
+                document.getElementById('question').innerHTML = `Q${index + 1}: ${q.question}`;
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = '';
+
+                q.options.forEach((option, i) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.classList.add('option');
+                    
+                    if (userAnswers[index] !== null) {
+                        if (userAnswers[index] === option) {
+                            optionDiv.classList.add('selected');
+                        }
+                        if (option === q.answer) {
+                            optionDiv.classList.add('correct');
+                        } else if (userAnswers[index] === option) {
+                            optionDiv.classList.add('incorrect');
+                        }
+                    }
+
+                    optionDiv.textContent = `${String.fromCharCode(65 + i)}. ${option}`;
+                    optionDiv.onclick = () => selectOption(option, index);
+                    optionsContainer.appendChild(optionDiv);
+                });
+
+                document.getElementById('current-q-num').textContent = `${index + 1}`;
+                updateQuestionMenu();
+                updateProgressBar();
+                hideReasoning();
+            }
+        }
+
+        function updateQuestionMenu() {
+            const menu = document.getElementById('question-menu');
+            menu.innerHTML = '';
+            for (let i = 0; i < currentQuizData.length; i++) {
+                const numberDiv = document.createElement('div');
+                numberDiv.classList.add('question-number');
+                numberDiv.textContent = i + 1;
+                numberDiv.onclick = () => loadQuestion(i);
+
+                if (i === currentQuestion) {
+                    numberDiv.classList.add('current');
+                } else if (userAnswers[i] !== null) {
+                    numberDiv.classList.add('answered');
+                } else if (visitedQuestions[i]) {
+                    numberDiv.classList.add('visited');
+                }
+                menu.appendChild(numberDiv);
+            }
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar-segment');
+            const visitedCount = visitedQuestions.filter(visited => visited).length;
+            const progress = (visitedCount / currentQuizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function selectOption(option, questionIndex) {
+            const optionsDivs = document.getElementById('options').querySelectorAll('.option');
+            
+            if (userAnswers[questionIndex] !== null) {
+                return;
+            }
+            
+            userAnswers[questionIndex] = option;
+            
+            optionsDivs.forEach(div => {
+                div.classList.remove('selected');
+                div.style.pointerEvents = 'none';
+                if (div.textContent.substring(3).trim() === option.trim()) {
+                    div.classList.add('selected');
+                }
+            });
+
+            const currentQ = currentQuizData[questionIndex];
+            optionsDivs.forEach(div => {
+                if (div.textContent.substring(3).trim() === currentQ.answer.trim()) {
+                    div.classList.add('correct');
+                } else if (div.classList.contains('selected')) {
+                    div.classList.add('incorrect');
+                }
+            });
+            
+            updateQuestionMenu();
+            updateProgressBar();
+        }
+
+        function navigateQuestion(direction) {
+            let nextIndex = currentQuestion + direction;
+            if (nextIndex >= 0 && nextIndex < currentQuizData.length) {
+                loadQuestion(nextIndex);
+            }
+        }
+
+        function skipQuestion() {
+            if (currentQuestion < currentQuizData.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            showResult();
+        }
+
+        function showResult() {
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let attemptedCount = 0;
+
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    attemptedCount++;
+                    if (answer.trim() === currentQuizData[index].answer.trim()) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                }
+            });
+
+            document.getElementById('result-name').textContent = studentInfo.name;
+            document.getElementById('result-email').textContent = studentInfo.email;
+            document.getElementById('result-mobile').textContent = studentInfo.mobile;
+            document.getElementById('result-time-spent').textContent = formatTimeSpent();
+            document.getElementById('result-test-id').textContent = currentTestID;
+            document.getElementById('result-subject').textContent = document.getElementById('quiz-title').textContent.replace('Subject: ', '');
+            document.getElementById('total-count').textContent = currentQuizData.length;
+            document.getElementById('attempted-count').textContent = attemptedCount;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+            
+            document.getElementById('score').textContent = `Quiz Score: You Got ${correctCount}/${currentQuizData.length}`;
+
+            showSection('result-section');
+            hideModal('submit-modal');
+        }
+
+        function formatTimeSpent() {
+            const totalSeconds = (currentQuizData.length * 60) - totalTimeLeft;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes}m ${seconds}s`;
+        }
+
+        function restartTest() {
+            userAnswers = Array(currentQuizData.length).fill(null);
+            visitedQuestions = Array(currentQuizData.length).fill(false);
+            currentQuestion = 0;
+            totalTimeLeft = currentQuizData.length * 60;
+
+            loadQuestion(0);
+            startTimer();
+            showSection('quiz-section');
+        }
+
+        function returnToQuizList() {
+            showSection('quiz-selection-section');
+            generateQuizButtons();
+        }
+
+        function toggleReasoning() {
+            const reasoningContent = document.getElementById('reasoning');
+            const reasonBtn = document.getElementById('reason-btn');
+            const currentQ = currentQuizData[currentQuestion];
+            if (reasoningContent.style.display === 'block') {
+                reasoningContent.style.display = 'none';
+                reasonBtn.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg> Show Reasoning`;
+            } else {
+                reasoningContent.style.display = 'block';
+                document.getElementById('reasoning-text').textContent = currentQ.reasoning;
+                reasonBtn.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg> Hide Reasoning`;
+            }
+        }
+
+        function hideReasoning() {
+            const reasoningContent = document.getElementById('reasoning');
+            reasoningContent.style.display = 'none';
+            const reasonBtn = document.getElementById('reason-btn');
+            reasonBtn.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+                            <path d="M12 16L16 12L12 8"></path>
+                            <path d="M8 12L16 12"></path>
+                        </svg> Show Reasoning`;
+        }
+
+        window.onload = function() {
+            document.getElementById('signin-section').classList.add('active');
+        };
+    </script>
+</body>
+</html>
